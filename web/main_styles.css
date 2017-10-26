@@ -1,0 +1,57 @@
+html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+body {
+    min-height: 100%;
+    margin: 0;
+    background: url("Multimedia/General/MWP background tile.jpg") repeat;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+a.nav-link {
+    font-size: 1.4em;
+}
+
+#logo {
+    height: 120px;
+    width: 120px;
+}
+
+.btn.btn-outline-success.my-2.my-sm-0 {
+    border-color: #01579B;
+    color: #01579B;
+}
+
+.btn.btn-outline-success.my-2.my-sm-0:hover {
+    background-color: #01579B;
+    color: white;
+}
+
+.btn.btn-outline-success.my-2.my-sm-0:focus {
+    box-shadow: #0288D1;
+}
+
+#content {
+    margin: 10px;
+    display: flex;
+    flex-flow: wrap;
+    align-content: center;
+    justify-content: center;
+}
+
+.card {
+    border-radius: 20px;
+    margin: 25px;
+}
+
+.card-img-top {
+    padding: 10px;
+}
+
+
