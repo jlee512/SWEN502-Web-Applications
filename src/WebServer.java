@@ -20,142 +20,24 @@ public class WebServer {
         // path and an object to handle requests on that. We set up two
         // contexts by default.
         //
-        // The first is just a "hello world" context, that does the bare
-        // minimum to serve out the string "Hello, world!" at
-        // http://localhost:8080/hello
-        server.createContext("/hello", new HelloHandler());
         server.createContext("/greeting", new GreetingHandler());
         // The second, StaticHandler, serves out regular files from a directory
         // when requested by name. We've asked it to serve the "web" directory
         // at http://localhost:8080/
+        //The static handler class has been extracted and will be 'route' based rather than filename based
+        //i.e. instead of requesting /welcome_page.html the server will respond to '/welcome' with welcome_page.html
+        //Static handler will have predefined routes:
+        //1) '/welcome' renders the welcome_page.html page to the browser
         server.createContext("/", new StaticHandler("web"));
         server.setExecutor(null);
         System.out.println("Starting server on http://localhost:8080/ ...");
         server.start();
     }
 
-    // HelloHandler is a minimal handler that just sends "Hello, world!"
-    // as the response to every request. It shows the necessary steps for 
-    // custom handlers to work.
-    static class HelloHandler implements HttpHandler {
-        public void handle(HttpExchange t) throws IOException {
-            InputStream is = t.getRequestBody();
-            byte[] body = WebServer.readStream(is);
-            String response = "Hello, world!";
-            t.sendResponseHeaders(200, response.length());
-            OutputStream os = t.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        }
-    }
-
     // StaticHandler implements a traditional file-based web server.
     // It keeps track of a root directory to search in, and looks up
     // any files that are requested within that, then just sends them
-    // as-is back to the web browser.
-    static class StaticHandler implements HttpHandler {
-
-        private boolean verbose = true;
-        private File root;
-
-        public StaticHandler(String path) {
-            root = new File(path);
-        }
-
-        public void handle(HttpExchange t) throws IOException {
-            log(t.getRequestMethod() + " " + t.getRequestURI());
-            InputStream is = t.getRequestBody();
-            // If we don't read the whole body, things can break, but we're
-            // not using it at the moment.
-            byte[] body = WebServer.readStream(is);
-            // We want to take the request path and strip out the context's
-            // prefix set up earlier, and any extra / characters, so that
-            // we can use it as a filename.
-            String prefix = t.getHttpContext().getPath();
-            String filename = t.getRequestURI().getPath().substring(prefix.length());
-
-            while (filename.startsWith("/"))
-                filename = filename.substring(1);
-            // Create a new File object representing this file inside
-            // that root, and check that it exists.
-            File file = new File(root, filename);
-            if (!file.exists() || (filename.indexOf("..") != -1)) {
-                WebServer.error(404, "Not Found", t);
-                return;
-            }
-
-
-            if (file.isDirectory()) {
-                serveDirectory(file, t);
-            } else {
-                serveFile(file, t);
-            }
-        }
-
-        // Serves out an individual file as read from the disk to the
-        // browser, assuming that it exists.
-        private void serveFile(File file, HttpExchange t) throws IOException {
-            Headers headers = t.getResponseHeaders();
-            headers.set("Content-type", getMimeType(file.getName()));
-            log("--> serving file as " + getMimeType(file.getName()));
-            byte[] response = Files.readAllBytes(file.toPath());
-            t.sendResponseHeaders(200, response.length);
-            OutputStream os = t.getResponseBody();
-            os.write(response);
-            os.close();
-        }
-
-        // Serves out directory dir as an HTML page with links to
-        // each file in the directory.
-        private void serveDirectory(File dir, HttpExchange t) throws IOException {
-            log("--> serving directory");
-            File index = new File(dir, "index.html");
-            if (index.exists()) {
-                log("--> found index");
-                serveFile(index, t);
-                return;
-            }
-            Headers headers = t.getResponseHeaders();
-            headers.set("Content-type", "text/html; charset=utf-8");
-            File[] files = dir.listFiles();
-            String response = "<html><head></head><body>"
-            		+ "<h1>Directory " + dir.getName() + "</h1>"
-            		+ "<ul>";
-            for (File f : files) {
-            	String n = f.getName() + (f.isDirectory() ? "/" : "");
-                response += "<li><a href=\"" + n + "\">" + n + "</a></li>";
-            }
-            response += "</ul></body></html>";
-            t.sendResponseHeaders(200, response.length());
-            OutputStream os = t.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        }
-
-        // Pick a suitable content-type header for a file based on its
-        // extension. This list is incomplete and you might find you
-        // need to extend it.
-        // See <https://en.wikipedia.org/wiki/Media_type>
-        private String getMimeType(String name) {
-            if (name.endsWith(".txt"))  return "text/plain";
-            if (name.endsWith(".html")) return "text/html; charset=utf-8";
-            if (name.endsWith(".htm"))  return "text/html; charset=utf-8";
-            if (name.endsWith(".css"))  return "text/css";
-            if (name.endsWith(".js"))   return "text/javascript";
-            if (name.endsWith(".png"))  return "image/png";
-            if (name.endsWith(".jpg"))  return "image/jpeg";
-            if (name.endsWith(".jpeg")) return "image/jpeg";
-            if (name.endsWith(".java")) return "text/plain";
-            if (name.endsWith(".woff")) return "font/woff";
-            if (name.endsWith(".json")) return "application/json";
-            return "application/octet-stream";
-        }
-
-        private void log(String message) {
-            if (verbose)
-                System.out.println(message);
-        }
-    }
+    // as-is back to the web browser
 
     // GreetingHandler uses query-string parameters and a form to have the page
     // respond to the user. It's very similar to the HelloHandler except
