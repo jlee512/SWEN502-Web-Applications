@@ -52,8 +52,8 @@ public class StaticHandler implements HttpHandler {
             filename = "add_project.html";
         } else if (filename.equals("about_me")) {
             filename = "about_me.html";
-        } else {
-
+        } else if (filename.equals("get_all_projects")) {
+            filename = ""
         }
 
         // ------------------------ End of route addition -------------------------------
