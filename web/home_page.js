@@ -17,9 +17,9 @@ function get_all_projects() {
             for (var i = 0; i < data.length; i++) {
                 var project_template = "<div class='card' style='width: 20rem;'>";
                 if (data[i].image_filepath !== "") {
-                    project_template += "<img class='card-img-top' src='" + data[i].image_filepath + "' alt='Card image cap'>";
+                    project_template += "<a href='" + data[i].image_filepath + "'><div class='card-img-top' alt='Card image cap' style='background-image: url(" + data[i].image_filepath + "); background-position: center; background-size: cover; height: 200px; width: 100%; padding: 15px;' ></div></a>";
                 } else {
-                    project_template += "<img class='card-img-top' src='Multimedia/General/default_project.jpg' alt='Card image cap'>";
+                    project_template += "<a href='Multimedia/General/default_project.jpg'><div class='card-img-top' alt='Card image cap' style='background-image: url('Multimedia/General/default_project.jpg'); background-position: center; background-size: cover; height: 200px; width: 100%; padding: 15px;' ></div></a>";
                 }
                 project_template += "<div class='card-body'>";
                 project_template += "<h4 class='card-title'>" + data[i].title + "</h4>";

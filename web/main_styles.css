@@ -51,7 +51,8 @@ a.nav-link {
 }
 
 .card-img-top {
-    padding: 10px;
+    border: 10px solid white;
+    overflow: hidden;
 }
 
 

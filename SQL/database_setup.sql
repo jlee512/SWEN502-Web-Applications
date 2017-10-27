@@ -31,3 +31,5 @@ INSERT INTO project(title, description, hyperlink, hyperlink_description, image_
 -- CRAFTS
 INSERT INTO project(title, description, hyperlink, hyperlink_description, image_filepath) VALUES
   ("Stewart Island cross-stitch bookmark", "During an amazing trip to Stewart Island at the bottom of New Zealand I found this Stewart Island cross-stitch bookmark kit which I completed to help us always remember the fun times on our holiday there", "https://nzfabs.com/products/cross-stitch-bookmark-stewart-island", "You can also get this bookmark here", "Multimedia/Crafts/2.jpg");
+
+INSERT INTO project(title, description, hyperlink, hyperlink_description, image_filepath) VALUES ("Spongebob Squarepants Cake", "I made this cake for a Spongebob fan. The jellyfish is made from REAL jelly and the rest of the decoration has been done using butter-icing", "", "", "Multimedia/Baking/22.jpg");
