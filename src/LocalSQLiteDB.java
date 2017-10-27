@@ -13,7 +13,7 @@ public class LocalSQLiteDB extends AbstractDB {
 
     public static LocalSQLiteDB getDatabaseObject() {
         //Database object to generate connections
-        File database = new File("public_transport.sqlite");
+        File database = new File("my_weekend_project.sqlite");
         return new LocalSQLiteDB("sqlite", database.getAbsolutePath());
     }
 

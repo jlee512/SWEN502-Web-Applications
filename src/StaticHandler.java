@@ -1,3 +1,4 @@
+import com.google.gson.Gson;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -7,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
-
+import java.util.ArrayList;
 /**
  * Created by Julian on 26/10/2017.
  */
@@ -52,22 +53,26 @@ public class StaticHandler implements HttpHandler {
             filename = "add_project.html";
         } else if (filename.equals("about_me")) {
             filename = "about_me.html";
-        } else if (filename.equals("get_all_projects")) {
-            filename = ""
         }
 
         // ------------------------ End of route addition -------------------------------
 
-        File file = new File(root, filename);
-        if (!file.exists() || (filename.indexOf("..") != -1)) {
-            WebServer.error(404, "Not Found", t);
-            return;
-        }
+        if (filename.equals("get_all_projects_json")) {
+            serveJSON(Project.getAllProjects(), t);
 
-        if (file.isDirectory()) {
-            serveDirectory(file, t);
         } else {
-            serveFile(file, t);
+
+            File file = new File(root, filename);
+            if (!file.exists() || (filename.indexOf("..") != -1)) {
+                WebServer.error(404, "Not Found", t);
+                return;
+            }
+
+            if (file.isDirectory()) {
+                serveDirectory(file, t);
+            } else {
+                serveFile(file, t);
+            }
         }
     }
 
@@ -78,6 +83,19 @@ public class StaticHandler implements HttpHandler {
         headers.set("Content-type", getMimeType(file.getName()));
         log("--> serving file as " + getMimeType(file.getName()));
         byte[] response = Files.readAllBytes(file.toPath());
+        t.sendResponseHeaders(200, response.length);
+        OutputStream os = t.getResponseBody();
+        os.write(response);
+        os.close();
+    }
+
+    // Serves out JSON as prepared from the database
+    protected void serveJSON(ArrayList<?> list_for_json, HttpExchange t) throws IOException {
+        Headers headers = t.getResponseHeaders();
+        headers.set("Content-type", "application/json");
+        log("--> serving json request");
+        String json_string = new Gson().toJson(list_for_json);
+        byte[] response = json_string.getBytes();
         t.sendResponseHeaders(200, response.length);
         OutputStream os = t.getResponseBody();
         os.write(response);
