@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Map;
+
 /**
  * Created by Julian on 26/10/2017.
  */
@@ -51,6 +53,37 @@ public class StaticHandler implements HttpHandler {
             filename = "home_page.html";
         } else if (filename.equals("add_project")) {
             filename = "add_project.html";
+            Map<String, String> params = WebServer.parseQuery(t.getRequestURI().getRawQuery());
+
+            //Code to handle post request when adding a project
+            if ("POST".equals(t.getRequestMethod())) {
+                // Try to convert it to a string, and ignore otherwise.
+                try {
+                    // Posted forms have the same format as
+                    // query strings, so we reuse the parsing.
+                    String postData = new String(body, "UTF-8");
+                    Map<String, String> postParams = WebServer.parseQuery(postData);
+                    params.putAll(postParams);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                String title = params.get("title");
+                String description = params.get("description");
+                String hyperlink = params.get("hyperlink");
+                String hyperlink_description = params.get("hyperlink_description");
+                //Image addition pending future developments
+                String image_filepath = "Multimedia/General/default_project.jpg";
+                String password = params.get("password");
+
+                boolean addProjectStatus = Project.addProject(title, description, hyperlink, hyperlink_description, image_filepath, password);
+                if (addProjectStatus) {
+                    //Successful addition
+                    filename = "add_project_success.html";
+                } else {
+                    filename = "add_project_fail.html";
+                }
+            }
+
         } else if (filename.equals("about_me")) {
             filename = "about_me.html";
         }

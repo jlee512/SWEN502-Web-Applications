@@ -62,4 +62,32 @@ public class Project {
         }
     }
 
+    public static boolean addProject(String title, String description, String hyperlink, String hyperlink_description, String image_filepath, String password) {
+        //Validate administration password
+        if (password.equals("test")) {
+
+            LocalSQLiteDB localSQLiteDB = LocalSQLiteDB.getDatabaseObject();
+            try (Connection c = localSQLiteDB.connection()) {
+                try (PreparedStatement stmt = c.prepareStatement("INSERT INTO project (title, description, hyperlink, hyperlink_description, image_filepath) VALUES (?, ?, ?, ?, ?)")) {
+                    stmt.setString(1, title);
+                    stmt.setString(2, description);
+                    stmt.setString(3, hyperlink);
+                    stmt.setString(4, hyperlink_description);
+                    stmt.setString(5, image_filepath);
+
+                    stmt.executeUpdate();
+                    System.out.println("Project added to database");
+                    return true;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return false;
+        } else {
+            return false;
+        }
+    }
+
 }
