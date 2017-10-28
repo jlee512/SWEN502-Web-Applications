@@ -49,6 +49,7 @@ public class StaticHandler implements HttpHandler {
         //Route (1) /welcome (i.e. index or landing page)
         //   /welcome
         if (filename.equals("")) {
+            System.out.println("test");
             filename = "welcome_page.html";
 
         //Route (2) /home (i.e. the main page)

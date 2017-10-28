@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Code:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Code_jar</output-path>
+    <root id="archive" name="Code.jar">
+      <element id="module-output" name="Code" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../../../Java/Java Libraries/gson-2.8.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../../../Java/Java Libraries/sqlite-jdbc-3.20.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
