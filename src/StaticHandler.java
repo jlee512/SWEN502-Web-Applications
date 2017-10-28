@@ -55,71 +55,79 @@ public class StaticHandler implements HttpHandler {
         //   /home
         } else if (filename.equals("home")) {
             filename = "home_page.html";
-        //Route (3) /add_project (i.e. for the site owner to add projects - password protected)
+        // Route (3) /contact (i.e. the contact the page owner page)
+        } else if (filename.equals("contact")) {
+            filename = "contact.html";
+        //Route (4) /add_project (i.e. for the site owner to add projects - password protected)
         //   /add_project (GET and POST methods)
         } else if (filename.equals("add_project")) {
-            filename = "add_project.html";
-            //Code to handle post request when adding a project
-            if ("POST".equals(t.getRequestMethod())) {
-                // Try to convert it to a string, and ignore otherwise.
-                try {
-                    // Posted forms have the same format as
-                    // query strings, so we reuse the parsing.
-                    String postData = new String(body, "UTF-8");
-                    Map<String, String> postParams = WebServer.parseQuery(postData);
-                    params.putAll(postParams);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                String title = params.get("title");
-                String description = params.get("description");
-                String hyperlink = params.get("hyperlink");
-                String hyperlink_description = params.get("hyperlink_description");
-                //Image addition pending future developments
-                String image_filepath = "Multimedia/General/default_project.jpg";
-                String password = params.get("password");
-
-                boolean addProjectStatus = Project.addProject(title, description, hyperlink, hyperlink_description, image_filepath, password);
-                if (addProjectStatus) {
-                    //Successful addition
-                    filename = "add_project_success.html";
-                } else {
-                    filename = "add_project_fail.html";
-                }
+        filename = "add_project.html";
+        //Code to handle post request when adding a project
+        if ("POST".equals(t.getRequestMethod())) {
+            // Try to convert it to a string, and ignore otherwise.
+            try {
+                // Posted forms have the same format as
+                // query strings, so we reuse the parsing.
+                String postData = new String(body, "UTF-8");
+                Map<String, String> postParams = WebServer.parseQuery(postData);
+                params.putAll(postParams);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            String title = params.get("title");
+            String description = params.get("description");
+            String hyperlink = params.get("hyperlink");
+            String hyperlink_description = params.get("hyperlink_description");
+            //Image addition pending future developments
+            String image_filepath = "Multimedia/General/default_project.jpg";
+            String password = params.get("password");
 
-        //Route (4) /about_me
+            boolean addProjectStatus = Project.addProject(title, description, hyperlink, hyperlink_description, image_filepath, password);
+            if (addProjectStatus) {
+                //Successful addition
+                filename = "add_project_success.html";
+            } else {
+                filename = "add_project_fail.html";
+            }
+        }
+
+        //Route (5) /about_me
         //   /about_me
-        } else if (filename.equals("about_me")) {
+        } else if(filename.equals("about_me")) {
             filename = "about_me.html";
         }
 
-        // ------------------------ End of route addition -------------------------------
+    // ------------------------ End of route addition -------------------------------
 
-        // JSON API routes
-        // JSON route (1) get_all_projects_json - returns all projects as a json object for display
-        if (filename.equals("get_all_projects_json")) {
-            serveJSON(Project.getAllProjects(), t);
+    // JSON API routes
+    // JSON route (1) get_all_projects_json - returns all projects as a json object for display
+    if(filename.equals("get_all_projects_json")) {
+        serveJSON(Project.getAllProjects(), t);
 
         // JSON route (2) get all_search_projects_json - returns all projects that are returned from a user input search string
-        } else if (filename.contains("get_search_projects_json")) {
-            serveJSON(Project.getSearchProjects(params.get("searchTerm")), t);
+    } else if(filename.contains("get_search_projects_json"))
 
+    {
+        serveJSON(Project.getSearchProjects(params.get("searchTerm")), t);
+
+    } else
+
+    {
+
+        File file = new File(root, filename);
+        if (!file.exists() || (filename.indexOf("..") != -1)) {
+            WebServer.error(404, "Not Found", t);
+            return;
+        }
+
+        if (file.isDirectory()) {
+            serveDirectory(file, t);
         } else {
-
-            File file = new File(root, filename);
-            if (!file.exists() || (filename.indexOf("..") != -1)) {
-                WebServer.error(404, "Not Found", t);
-                return;
-            }
-
-            if (file.isDirectory()) {
-                serveDirectory(file, t);
-            } else {
-                serveFile(file, t);
-            }
+            serveFile(file, t);
         }
     }
+
+}
 
     // Serves out an individual file as read from the disk to the
     // browser, assuming that it exists.
@@ -179,13 +187,13 @@ public class StaticHandler implements HttpHandler {
     // need to extend it.
     // See <https://en.wikipedia.org/wiki/Media_type>
     protected String getMimeType(String name) {
-        if (name.endsWith(".txt"))  return "text/plain";
+        if (name.endsWith(".txt")) return "text/plain";
         if (name.endsWith(".html")) return "text/html; charset=utf-8";
-        if (name.endsWith(".htm"))  return "text/html; charset=utf-8";
-        if (name.endsWith(".css"))  return "text/css";
-        if (name.endsWith(".js"))   return "text/javascript";
-        if (name.endsWith(".png"))  return "image/png";
-        if (name.endsWith(".jpg"))  return "image/jpeg";
+        if (name.endsWith(".htm")) return "text/html; charset=utf-8";
+        if (name.endsWith(".css")) return "text/css";
+        if (name.endsWith(".js")) return "text/javascript";
+        if (name.endsWith(".png")) return "image/png";
+        if (name.endsWith(".jpg")) return "image/jpeg";
         if (name.endsWith(".jpeg")) return "image/jpeg";
         //Added .svg file extension
         if (name.endsWith(".svg")) return "image/svg+xml";
