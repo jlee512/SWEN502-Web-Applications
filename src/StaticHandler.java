@@ -55,6 +55,8 @@ public class StaticHandler implements HttpHandler {
         //   /home
         } else if (filename.equals("home")) {
             filename = "home_page.html";
+        //Route (3) /add_project (i.e. for the site owner to add projects - password protected)
+        //   /add_project (GET and POST methods)
         } else if (filename.equals("add_project")) {
             filename = "add_project.html";
             //Code to handle post request when adding a project
@@ -86,15 +88,20 @@ public class StaticHandler implements HttpHandler {
                 }
             }
 
+        //Route (4) /about_me
+        //   /about_me
         } else if (filename.equals("about_me")) {
             filename = "about_me.html";
         }
 
         // ------------------------ End of route addition -------------------------------
 
+        // JSON API routes
+        // JSON route (1) get_all_projects_json - returns all projects as a json object for display
         if (filename.equals("get_all_projects_json")) {
             serveJSON(Project.getAllProjects(), t);
 
+        // JSON route (2) get all_search_projects_json - returns all projects that are returned from a user input search string
         } else if (filename.contains("get_search_projects_json")) {
             serveJSON(Project.getSearchProjects(params.get("searchTerm")), t);
 
