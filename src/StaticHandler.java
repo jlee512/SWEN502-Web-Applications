@@ -41,6 +41,10 @@ public class StaticHandler implements HttpHandler {
         // that root, and check that it exists.
         System.out.println(filename);
 
+        //Parse parameters in all cases
+        Map<String, String> params = WebServer.parseQuery(t.getRequestURI().getRawQuery());
+
+
         // ------------------------ Routes are added here ------------------------------
         //Route (1) /welcome (i.e. index or landing page)
         //   /welcome
@@ -53,8 +57,6 @@ public class StaticHandler implements HttpHandler {
             filename = "home_page.html";
         } else if (filename.equals("add_project")) {
             filename = "add_project.html";
-            Map<String, String> params = WebServer.parseQuery(t.getRequestURI().getRawQuery());
-
             //Code to handle post request when adding a project
             if ("POST".equals(t.getRequestMethod())) {
                 // Try to convert it to a string, and ignore otherwise.
@@ -92,6 +94,9 @@ public class StaticHandler implements HttpHandler {
 
         if (filename.equals("get_all_projects_json")) {
             serveJSON(Project.getAllProjects(), t);
+
+        } else if (filename.contains("get_search_projects_json")) {
+            serveJSON(Project.getSearchProjects(params.get("searchTerm")), t);
 
         } else {
 
