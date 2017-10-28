@@ -118,8 +118,6 @@ function get_search_projects() {
     });
 }
 
-get_all_projects();
-
 document.getElementById('searchButton').addEventListener('click', function(){
     get_search_projects();
     $(document).on('click', '#fullListButton', function() {
@@ -127,4 +125,17 @@ document.getElementById('searchButton').addEventListener('click', function(){
         $(this).remove();
     });
 });
+
+// If home has been accessed from a search, process search term otherwise, load all projects
+if (window.location.href.indexOf("searchTerm") > -1) {
+    var url = new URL(window.location.href);
+    var searchTerm = url.searchParams.get("searchTerm");
+    document.getElementById('searchText').value = searchTerm;
+    get_search_projects();
+    $(document).on('click', '#fullListButton', function() {
+        window.location.href = "/home";
+    });
+} else {
+    get_all_projects();
+}
 
