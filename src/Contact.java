@@ -67,8 +67,25 @@ public class Contact {
     }
 
     //Method for submitting a new message to the database
-    public static void addMessageToDB(String subject, String contact_details, String message_body) {
+    public static boolean addMessageToDB(String subject, String contact_details, String message_body) {
+        //Establish connection to the database
+        LocalSQLiteDB localSQLiteDB = LocalSQLiteDB.getDatabaseObject();
+        try (Connection c = localSQLiteDB.connection()) {
+            try (PreparedStatement stmt = c.prepareStatement("INSERT INTO contact(subject, contact_details, message_body) VALUES (?, ?, ?)")) {
+                stmt.setString(1, subject);
+                stmt.setString(2, contact_details);
+                stmt.setString(3, message_body);
 
+                stmt.executeUpdate();
+                System.out.println("Message added to database");
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     //Protoype interface to review all messages posted to the system through the contact form

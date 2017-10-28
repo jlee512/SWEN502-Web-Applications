@@ -71,16 +71,16 @@ public class StaticHandler implements HttpHandler {
                     e.printStackTrace();
                 }
                 String subject = params.get("subject");
-                String contact = params.get("contact");
-                String body_text = params.get("body");
+                String contact = params.get("email");
+                String body_text = params.get("message");
 
-//                boolean addProjectStatus = Project.addProject(title, description, hyperlink, hyperlink_description, image_filepath, password);
-//                if (addProjectStatus) {
-//                    //Successful addition
-//                    filename = "add_project_success.html";
-//                } else {
-//                    filename = "add_project_fail.html";
-//                }
+                boolean addContactStatus = Contact.addMessageToDB(subject, contact, body_text);
+                if (addContactStatus) {
+                    //Successful addition
+                    filename = "contact_success.html";
+                } else {
+                    filename = "contact_fail.html";
+                }
             }
         //Route (4) /add_project (i.e. for the site owner to add projects - password protected)
         //   /add_project (GET and POST methods)
