@@ -74,6 +74,13 @@ public class StaticHandler implements HttpHandler {
                 String contact = params.get("email");
                 String body_text = params.get("message");
 
+                //Set a cookie to remember user email in the session in case they want to send another email
+                if (contact.length() > 0) {
+                    System.out.println("Adding cookie");
+                    Headers headers = t.getResponseHeaders();
+                    headers.set("Set-Cookie", "email=" + params.get("email"));
+                }
+
                 boolean addContactStatus = Contact.addMessageToDB(subject, contact, body_text);
                 if (addContactStatus) {
                     //Successful addition
