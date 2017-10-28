@@ -8,6 +8,7 @@ import java.util.ArrayList;
  * Created by Julian on 27/10/2017.
  */
 public class Project {
+    //This object acts to perform data-access from the server to the database for all Projects on the website
 
     //Project object properties
     int id;

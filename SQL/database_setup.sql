@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS project;
+DROP TABLE IF EXISTS contact;
 
 CREATE TABLE project (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -7,6 +8,13 @@ CREATE TABLE project (
   hyperlink TEXT,
   hyperlink_description TEXT,
   image_filepath TEXT
+);
+
+CREATE TABLE contact (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  subject TEXT NOT NULL,
+  contact_details TEXT,
+  message_body TEXT NOT NULL
 );
 
 -- FOOD PROJECTS
@@ -33,3 +41,5 @@ INSERT INTO project(title, description, hyperlink, hyperlink_description, image_
   ("Stewart Island cross-stitch bookmark", "During an amazing trip to Stewart Island at the bottom of New Zealand I found this Stewart Island cross-stitch bookmark kit which I completed to help us always remember the fun times on our holiday there", "https://nzfabs.com/products/cross-stitch-bookmark-stewart-island", "You can also get this bookmark here", "Multimedia/Crafts/2.jpg");
 
 INSERT INTO project(title, description, hyperlink, hyperlink_description, image_filepath) VALUES ("Spongebob Squarepants Cake", "I made this cake for a Spongebob fan. The jellyfish is made from REAL jelly and the rest of the decoration has been done using butter-icing", "", "", "Multimedia/Baking/22.jpg");
+
+INSERT INTO contact(subject, contact_details, message_body) VALUES ("Welcome to My Weekend Project", "google@gmail.com", "Welcome to the World Wide Web");
